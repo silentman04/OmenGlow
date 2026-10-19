@@ -118,7 +118,7 @@ namespace Ohman {
 
                 var menu = new WF.ContextMenuStrip();
 
-                var itemOpen = new WF.ToolStripMenuItem("Open OMEN RGB");
+                var itemOpen = new WF.ToolStripMenuItem("Open " + DisplayName);
                 itemOpen.Font = new Font(itemOpen.Font, System.Drawing.FontStyle.Bold);
                 itemOpen.Click += delegate { mainWindow.ShowFromTray(); };
                 menu.Items.Add(itemOpen);
@@ -210,7 +210,7 @@ namespace Ohman {
         public static void NotifyHiddenToTray() {
             try {
                 if (trayIcon != null) {
-                    trayIcon.ShowBalloonTip(1500, DisplayName, "OMEN RGB is active in the system tray.", WF.ToolTipIcon.Info);
+                    trayIcon.ShowBalloonTip(1500, DisplayName, DisplayName + " is active in the system tray.", WF.ToolTipIcon.Info);
                 }
             } catch { }
         }

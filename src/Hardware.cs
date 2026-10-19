@@ -13,7 +13,7 @@ namespace Ohman {
 
     public static class Log {
         static readonly object Sync = new object();
-        public static string Path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "omenrgb.log");
+        public static string Path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "omenglow.log");
 
         public static void Write(string s) {
             try {
