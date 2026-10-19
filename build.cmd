@@ -1,9 +1,10 @@
 @echo off
-:: Builds OMEN 4-Zone RGB Lighting Utility
+:: Builds OmenGlow - Standalone 4-Zone RGB Keyboard Lighting Utility
 setlocal
 cd /d "%~dp0"
 if exist "%USERPROFILE%\.dotnet\dotnet.exe" set PATH=%USERPROFILE%\.dotnet;%PATH%
-echo Building OMEN 4-Zone RGB Keyboard Lighting utility...
+echo Building OmenGlow (4-Zone RGB Lighting)...
 dotnet build -c Release
 if errorlevel 1 exit /b 1
-echo Built bin\Release\OmenRgb.exe successfully.
+echo.
+echo Built bin\Release\OmenGlow.exe successfully.

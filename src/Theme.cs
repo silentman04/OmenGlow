@@ -112,4 +112,48 @@ namespace Ohman {
             return 1 - Math.Exp(-a * t) * (Math.Cos(b * t) + a / b * Math.Sin(b * t));
         }
     }
+
+    public static class ThemeManager {
+        public static bool IsDark { get; private set; } = true;
+
+        public static void Apply(Window win, KeyboardView kbd, Seg seg, bool dark) {
+            IsDark = dark;
+            var res = win.Resources;
+
+            if (dark) {
+                // Dark OMEN Palette
+                res["WindowBg"] = Ui.Brush("#161311");
+                res["Card"] = Ui.Brush("#1C1816");
+                res["Sunken"] = Ui.Brush("#0D0B0A");
+                res["Pill"] = Ui.Brush("#25201D");
+                res["Line"] = Ui.Brush("#2A2522");
+                res["LineHi"] = Ui.Brush("#3D3733");
+                res["Text"] = Ui.Brush("#EDEAE8");
+                res["TextHi"] = Ui.Brush("#FFFFFF");
+                res["Sub"] = Ui.Brush("#96918D");
+                res["Desc"] = Ui.Brush("#807B77");
+                res["SegText"] = Ui.Brush("#A8A3A0");
+                res["Accent"] = Ui.Brush("#FF0055");
+                res["AccentHi"] = Ui.Brush("#FF2D6E");
+            } else {
+                // Light Modern Palette
+                res["WindowBg"] = Ui.Brush("#F4F3F6");
+                res["Card"] = Ui.Brush("#FFFFFF");
+                res["Sunken"] = Ui.Brush("#E8E6ED");
+                res["Pill"] = Ui.Brush("#F9F8FA");
+                res["Line"] = Ui.Brush("#D6D3DC");
+                res["LineHi"] = Ui.Brush("#B8B4C2");
+                res["Text"] = Ui.Brush("#1C1A21");
+                res["TextHi"] = Ui.Brush("#0C0A10");
+                res["Sub"] = Ui.Brush("#5E5A69");
+                res["Desc"] = Ui.Brush("#726E7E");
+                res["SegText"] = Ui.Brush("#555260");
+                res["Accent"] = Ui.Brush("#E6004C");
+                res["AccentHi"] = Ui.Brush("#FF1A66");
+            }
+
+            if (kbd != null) kbd.SetTheme(dark);
+            if (seg != null) seg.SetTheme(dark);
+        }
+    }
 }

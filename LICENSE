@@ -1,13 +1,13 @@
-Ohman is free software under the GNU General Public License, version 3 or later.
+OmenGlow is free software under the GNU General Public License, version 3 or later.
 Copyright (C) 2026 the Ohman authors.
+Copyright (C) 2026 OmenGlow contributors.
 
-It embeds the IBM Plex typefaces, which are licensed separately under the SIL Open Font
-License 1.1, Copyright (c) 2017 IBM Corp. with Reserved Font Name "Plex". That licence
-permits bundling them with software under any terms, and it requires the notice and the
-licence text to travel with them: see fonts/OFL.txt, which ships in the release archive
-and is written out beside the fonts at run time.
+Modified from Ohman by P4R1H (October 2026):
+Refactored into a standalone, safe 4-Zone RGB keyboard lighting utility for HP Omen
+laptops, with all thermal monitoring, fan curve profiles, and power controls removed.
 
-The GNU General Public License below covers everything else.
+The GNU General Public License below covers this software.
+
 
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007

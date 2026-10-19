@@ -25,16 +25,28 @@ namespace Ohman {
         Rgb curColor = new Rgb(0xFF, 0x00, 0x55);
         bool syncing;
 
-        static readonly Rgb[] PresetColors = new[] {
-            new Rgb(0xFF, 0x00, 0x44), // OMEN Red / Crimson
-            new Rgb(0xFF, 0x55, 0x00), // Orange
-            new Rgb(0xFF, 0xCC, 0x00), // Amber / Yellow
-            new Rgb(0x00, 0xE6, 0x76), // Green
-            new Rgb(0x00, 0xEE, 0xFF), // Cyan
-            new Rgb(0x29, 0x79, 0xFF), // Blue
-            new Rgb(0x99, 0x00, 0xFF), // Purple
-            new Rgb(0xFF, 0x00, 0xCC), // Magenta / Pink
-            new Rgb(0xFF, 0xFF, 0xFF)  // Pure White
+        struct Preset {
+            public string Name;
+            public Rgb Color;
+            public Preset(string name, Rgb color) {
+                Name = name;
+                Color = color;
+            }
+        }
+
+        static readonly Preset[] PresetColors = new[] {
+            new Preset("OMEN Crimson", new Rgb(0xFF, 0x00, 0x44)),
+            new Preset("Max Red", new Rgb(0xFF, 0x00, 0x00)),
+            new Preset("Orange", new Rgb(0xFF, 0x55, 0x00)),
+            new Preset("Amber Yellow", new Rgb(0xFF, 0xCC, 0x00)),
+            new Preset("Green", new Rgb(0x00, 0xE6, 0x76)),
+            new Preset("Max Green", new Rgb(0x00, 0xFF, 0x00)),
+            new Preset("Cyan", new Rgb(0x00, 0xEE, 0xFF)),
+            new Preset("Blue", new Rgb(0x29, 0x79, 0xFF)),
+            new Preset("Max Blue", new Rgb(0x00, 0x00, 0xFF)),
+            new Preset("Purple", new Rgb(0x99, 0x00, 0xFF)),
+            new Preset("Magenta", new Rgb(0xFF, 0x00, 0xCC)),
+            new Preset("Pure White", new Rgb(0xFF, 0xFF, 0xFF))
         };
 
         public MainWindow(Engine engine) {
@@ -75,18 +87,21 @@ namespace Ohman {
 
             // Build Preset Palette
             foreach (var pc in PresetColors) {
-                var c = pc;
+                var c = pc.Color;
                 var chip = new Border {
-                    Width = 22,
-                    Height = 22,
-                    CornerRadius = new CornerRadius(11),
+                    Width = 20,
+                    Height = 20,
+                    CornerRadius = new CornerRadius(10),
                     Background = Ui.Brush(c),
                     BorderBrush = Ui.LineHi,
                     BorderThickness = new Thickness(1),
-                    Margin = new Thickness(3, 0, 3, 0),
-                    Cursor = Cursors.Hand
+                    Margin = new Thickness(2.5, 2, 2.5, 2),
+                    Cursor = Cursors.Hand,
+                    ToolTip = $"{pc.Name} (#{c.Hex})"
                 };
                 chip.MouseLeftButtonUp += delegate { ApplyColor(c, false); };
+                chip.MouseEnter += delegate { chip.BorderBrush = Brushes.White; };
+                chip.MouseLeave += delegate { chip.BorderBrush = Ui.LineHi; };
                 PresetPalette.Children.Add(chip);
             }
 
@@ -134,6 +149,8 @@ namespace Ohman {
             BtnMinimizeTrayTop.Click += delegate { HideToTray(); };
             BtnMinimizeTray.Click += delegate { HideToTray(); };
             BtnOffToggle.Click += delegate { TogglePower(); };
+            BtnReset.Click += delegate { ResetDefaults(); };
+            BtnThemeToggle.Click += delegate { ToggleTheme(); };
 
             // Engine Frame Changed (Live Animation)
             E.FrameChanged += delegate(Rgb[] frame) {
@@ -159,6 +176,7 @@ namespace Ohman {
 
             SelectZone(KeyboardLayouts.ZoneWasd);
             RefreshAll();
+            ApplyTheme(E.S.DarkTheme);
         }
 
         void SelectZone(int zone) {
@@ -196,20 +214,46 @@ namespace Ohman {
         }
 
         void UpdateZoneCardHighlights() {
-            var activeBrush = Ui.Accent;
-            var inactiveBrush = Ui.Line;
+            var activeBorder = (Brush)FindResource("Accent");
+            var inactiveBorder = (Brush)FindResource("Line");
+            var activeBg = (Brush)FindResource("Pill");
+            var inactiveBg = (Brush)FindResource("Card");
 
-            BtnZoneWasd.BorderBrush = (!allZonesSelected && selectedZone == KeyboardLayouts.ZoneWasd) ? activeBrush : inactiveBrush;
-            BtnZoneLeft.BorderBrush = (!allZonesSelected && selectedZone == KeyboardLayouts.ZoneLeft) ? activeBrush : inactiveBrush;
-            BtnZoneMiddle.BorderBrush = (!allZonesSelected && selectedZone == KeyboardLayouts.ZoneMiddle) ? activeBrush : inactiveBrush;
-            BtnZoneRight.BorderBrush = (!allZonesSelected && selectedZone == KeyboardLayouts.ZoneRight) ? activeBrush : inactiveBrush;
-            BtnZoneAll.BorderBrush = allZonesSelected ? activeBrush : inactiveBrush;
+            BtnZoneWasd.BorderBrush = (!allZonesSelected && selectedZone == KeyboardLayouts.ZoneWasd) ? activeBorder : inactiveBorder;
+            BtnZoneLeft.BorderBrush = (!allZonesSelected && selectedZone == KeyboardLayouts.ZoneLeft) ? activeBorder : inactiveBorder;
+            BtnZoneMiddle.BorderBrush = (!allZonesSelected && selectedZone == KeyboardLayouts.ZoneMiddle) ? activeBorder : inactiveBorder;
+            BtnZoneRight.BorderBrush = (!allZonesSelected && selectedZone == KeyboardLayouts.ZoneRight) ? activeBorder : inactiveBorder;
+            BtnZoneAll.BorderBrush = allZonesSelected ? activeBorder : inactiveBorder;
 
-            BtnZoneWasd.Background = (!allZonesSelected && selectedZone == KeyboardLayouts.ZoneWasd) ? Ui.Pill : Ui.Card;
-            BtnZoneLeft.Background = (!allZonesSelected && selectedZone == KeyboardLayouts.ZoneLeft) ? Ui.Pill : Ui.Card;
-            BtnZoneMiddle.Background = (!allZonesSelected && selectedZone == KeyboardLayouts.ZoneMiddle) ? Ui.Pill : Ui.Card;
-            BtnZoneRight.Background = (!allZonesSelected && selectedZone == KeyboardLayouts.ZoneRight) ? Ui.Pill : Ui.Card;
-            BtnZoneAll.Background = allZonesSelected ? Ui.Pill : Ui.Card;
+            BtnZoneWasd.Background = (!allZonesSelected && selectedZone == KeyboardLayouts.ZoneWasd) ? activeBg : inactiveBg;
+            BtnZoneLeft.Background = (!allZonesSelected && selectedZone == KeyboardLayouts.ZoneLeft) ? activeBg : inactiveBg;
+            BtnZoneMiddle.Background = (!allZonesSelected && selectedZone == KeyboardLayouts.ZoneMiddle) ? activeBg : inactiveBg;
+            BtnZoneRight.Background = (!allZonesSelected && selectedZone == KeyboardLayouts.ZoneRight) ? activeBg : inactiveBg;
+            BtnZoneAll.Background = allZonesSelected ? activeBg : inactiveBg;
+        }
+
+        void ResetDefaults() {
+            E.ResetToDefaults();
+            SelectZone(KeyboardLayouts.ZoneWasd);
+            RefreshAll();
+        }
+
+        void ToggleTheme() {
+            ApplyTheme(!ThemeManager.IsDark);
+        }
+
+        void ApplyTheme(bool dark) {
+            E.S.DarkTheme = dark;
+            E.S.Save();
+
+            ThemeManager.Apply(this, kbdView, modeSeg, dark);
+
+            BtnThemeToggle.Content = dark ? "☀ Light" : "🌙 Dark";
+            BtnThemeToggle.ToolTip = dark ? "Switch to Light theme" : "Switch to Dark theme";
+
+            UpdateZoneCardHighlights();
+            hueBar.Repaint();
+            shadeBar.Repaint();
         }
 
         void ApplyColor(Rgb c, bool fromHex) {

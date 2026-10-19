@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// OMEN 4-Zone RGB: Product metadata and assembly information.
+// OmenGlow: Standalone 4-Zone RGB Keyboard Lighting utility for HP Omen laptops.
 using System.Reflection;
 
-[assembly: AssemblyTitle("OMEN 4-Zone RGB")]
-[assembly: AssemblyProduct("OMEN 4-Zone RGB")]
+[assembly: AssemblyTitle("OmenGlow")]
+[assembly: AssemblyProduct("OmenGlow")]
 [assembly: AssemblyDescription("Lightweight, standalone 4-Zone RGB Keyboard Lighting utility for HP Omen laptops.")]
-[assembly: AssemblyCompany("OMEN RGB")]
+[assembly: AssemblyCompany("OmenGlow")]
 [assembly: AssemblyCopyright("Copyright (C) 2026 - GPL-3.0-or-later")]
 [assembly: AssemblyVersion(Ohman.Meta.Version)]
 [assembly: AssemblyFileVersion(Ohman.Meta.Version)]
@@ -13,6 +13,8 @@ using System.Reflection;
 
 namespace Ohman {
     public static class Meta {
+        public const string Name = "OmenGlow";
+        public const string DisplayName = "OmenGlow - 4-Zone RGB Lighting";
         public const string Version = "2.0.0";
     }
 }

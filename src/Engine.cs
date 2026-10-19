@@ -19,8 +19,9 @@ namespace Ohman {
         public string LightColors = "";               // Comma-separated hex colours for zones
         public bool StartHidden = false;
         public bool TookWinLighting = false;
+        public bool DarkTheme = true;
 
-        static readonly string StateFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "omenrgb.state");
+        static readonly string StateFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "omenglow.state");
 
         public static Settings Load() {
             var s = new Settings();
@@ -42,6 +43,7 @@ namespace Ohman {
                         case "LightColors": s.LightColors = v; break;
                         case "StartHidden": if (bool.TryParse(v, out b)) s.StartHidden = b; break;
                         case "TookWinLighting": if (bool.TryParse(v, out b)) s.TookWinLighting = b; break;
+                        case "DarkTheme": if (bool.TryParse(v, out b)) s.DarkTheme = b; break;
                     }
                 }
             } catch (Exception ex) {
@@ -53,7 +55,7 @@ namespace Ohman {
         public void Save() {
             try {
                 var sb = new StringBuilder();
-                sb.AppendLine("# OMEN 4-Zone RGB State");
+                sb.AppendLine("# OmenGlow 4-Zone RGB State");
                 sb.AppendLine("Light=" + Light);
                 sb.AppendLine("LightEffect=" + LightEffect);
                 sb.AppendLine("LightSpeed=" + LightSpeed);
@@ -61,6 +63,7 @@ namespace Ohman {
                 sb.AppendLine("LightColors=" + LightColors);
                 sb.AppendLine("StartHidden=" + StartHidden);
                 sb.AppendLine("TookWinLighting=" + TookWinLighting);
+                sb.AppendLine("DarkTheme=" + DarkTheme);
                 File.WriteAllText(StateFile, sb.ToString());
             } catch (Exception ex) {
                 Log.Write("settings save error: " + ex.Message);
@@ -82,6 +85,13 @@ namespace Ohman {
         System.Threading.Timer fxTimer;
         double fxPhase;
         int fxFailures;
+
+        public static readonly Rgb[] DefaultZoneColors = new Rgb[] {
+            new Rgb(0x00, 0x99, 0xFF), // Zone 0: Right (Azure Blue)
+            new Rgb(0x00, 0xEE, 0xFF), // Zone 1: Middle (Cyan)
+            new Rgb(0x99, 0x00, 0xFF), // Zone 2: Left (Purple)
+            new Rgb(0xFF, 0x00, 0x55)  // Zone 3: WASD (Pinkish Red)
+        };
 
         public Engine(IHardware hw, Settings s) {
             Hw = hw;
@@ -109,13 +119,7 @@ namespace Ohman {
                     if (fwColors != null && fwColors.Length == zoneCount) {
                         LightColors = (Rgb[])fwColors.Clone();
                     } else {
-                        // Default vivid palette: Zone 0 (Right: Blue), Zone 1 (Middle: Cyan), Zone 2 (Left: Purple), Zone 3 (WASD: Red)
-                        LightColors = new Rgb[] {
-                            new Rgb(0x00, 0x99, 0xFF),
-                            new Rgb(0x00, 0xEE, 0xFF),
-                            new Rgb(0x99, 0x00, 0xFF),
-                            new Rgb(0xFF, 0x00, 0x55)
-                        };
+                        LightColors = (Rgb[])DefaultZoneColors.Clone();
                     }
                     S.LightColors = JoinColors(LightColors);
                 }
@@ -246,6 +250,21 @@ namespace Ohman {
                 }
             }
             OnChanged();
+        }
+
+        public void ResetToDefaults() {
+            LightColors = (Rgb[])DefaultZoneColors.Clone();
+            S.Light = 1;         // Light ON
+            S.LightEffect = 0;   // Static Mode
+            S.LightSpeed = 3;    // Default Speed
+            S.LightLevel = 100;  // 100% Brightness
+            S.LightColors = JoinColors(LightColors);
+            S.Save();
+
+            ApplyLightCore();
+            OnChanged();
+            var fh = FrameChanged;
+            if (fh != null) fh(LightColors);
         }
 
         public static double SpeedFactor(int speed) {

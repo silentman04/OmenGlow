@@ -53,8 +53,10 @@ namespace Ohman {
             for (int i = 0; i < Cells; i++)
                 dc.DrawRectangle(Ui.Brush(ColorAt(i)), null, new Rect(i * w, 0, w + 0.7, h));
             int sel = Nearest();
-            if (sel >= 0)
-                dc.DrawRectangle(null, new Pen(Ui.Brush("#FCFAF9"), 2), new Rect(sel * w + 1, 1, Math.Max(1, w - 2), h - 2));
+            if (sel >= 0) {
+                var stroke = ThemeManager.IsDark ? Ui.Brush("#FCFAF9") : Ui.Brush("#1C1A21");
+                dc.DrawRectangle(null, new Pen(stroke, 2), new Rect(sel * w + 1, 1, Math.Max(1, w - 2), h - 2));
+            }
         }
 
         void Pick(Point p) {
@@ -131,8 +133,8 @@ namespace Ohman {
                     var h = Picked;
                     if (h != null) h(idx);
                 };
-                cell.MouseEnter += delegate { if (idx != sel) tb.Foreground = Ui.TextB; };
-                cell.MouseLeave += delegate { if (idx != sel) tb.Foreground = Ui.SegText; };
+                cell.MouseEnter += delegate { if (idx != sel) tb.Foreground = ThemeManager.IsDark ? Ui.Brush("#EDEAE8") : Ui.Brush("#1C1A21"); };
+                cell.MouseLeave += delegate { if (idx != sel) tb.Foreground = ThemeManager.IsDark ? Ui.Brush("#A8A3A0") : Ui.Brush("#555260"); };
 
                 labels.Add(tb);
                 items.Add(cell);
@@ -141,10 +143,20 @@ namespace Ohman {
             cells.SizeChanged += delegate { Place(false); };
         }
 
+        public void SetTheme(bool dark) {
+            Background = dark ? Ui.Brush("#0D0B0A") : Ui.Brush("#E8E6ED");
+            var textNormal = dark ? Ui.Brush("#A8A3A0") : Ui.Brush("#555260");
+            for (int j = 0; j < labels.Count; j++) {
+                if (j != sel) labels[j].Foreground = textNormal;
+            }
+        }
+
         public void Select(int i, bool animate) {
             sel = i;
+            var textHover = ThemeManager.IsDark ? Ui.Brush("#EDEAE8") : Ui.Brush("#1C1A21");
+            var textNormal = ThemeManager.IsDark ? Ui.Brush("#A8A3A0") : Ui.Brush("#555260");
             for (int j = 0; j < labels.Count; j++) {
-                labels[j].Foreground = j == i ? Brushes.White : (items[j].IsMouseOver ? Ui.TextB : Ui.SegText);
+                labels[j].Foreground = j == i ? Brushes.White : (items[j].IsMouseOver ? textHover : textNormal);
                 labels[j].FontWeight = j == i ? FontWeights.SemiBold : FontWeights.Normal;
             }
             Place(animate);

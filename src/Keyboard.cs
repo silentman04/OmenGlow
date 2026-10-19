@@ -53,12 +53,12 @@ namespace Ohman {
         public static List<KeyDef> Build(bool numpad, int zones) {
             var keys = new List<KeyDef>();
             string[][] rows = {
-                new[] { "Esc", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "Del" },
+                new[] { "Esc", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "Del:2.0" },
                 new[] { "`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "Bksp:2.0" },
                 new[] { "Tab:1.5", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "[", "]", "\\:1.5" },
                 new[] { "Caps:1.8", "A", "S", "D", "F", "G", "H", "J", "K", "L", ";", "'", "Enter:2.2" },
                 new[] { "Shift:2.3", "Z", "X", "C", "V", "B", "N", "M", ",", ".", "/", "Shift:2.7" },
-                new[] { "Ctrl:1.3", "Fn", "Win", "Alt:1.3", " :6.0", "Alt:1.3", "Ctrl:1.3", "◀", "▲▼", "▶" }
+                new[] { "Ctrl:1.25", "Fn", "Win", "Alt:1.25", " :5.0", "Alt:1.25", "Ctrl:1.25", "◀", "▲▼", "▶" }
             };
 
             double y = 0;
@@ -80,7 +80,7 @@ namespace Ohman {
             }
 
             if (numpad) {
-                double nx = 15.3;
+                double nx = 15.4;
                 string[][] np = {
                     new[] { "Num", "/", "*", "-" },
                     new[] { "7", "8", "9", "+" },
@@ -111,7 +111,7 @@ namespace Ohman {
                 if (zones != 4) { k.Zone = 0; continue; }
                 double mid = k.X + k.W / 2;
                 bool wasd = k.Label == "W" || k.Label == "A" || k.Label == "S" || k.Label == "D";
-                double rightFrom = k.Row == 5 ? 11.4 : 13.25;
+                double rightFrom = k.Row == 5 ? 11.8 : 12.8;
                 k.Zone = wasd ? ZoneWasd : mid < 5.9 ? ZoneLeft : mid < rightFrom ? ZoneMiddle : ZoneRight;
             }
             return keys;
@@ -137,8 +137,12 @@ namespace Ohman {
         double unitsW = 19.5, unitsH = 6;
         static Typeface face;
         static readonly Dictionary<uint, SolidColorBrush> Brushes_ = new Dictionary<uint, SolidColorBrush>();
-        static readonly Color OffCap = Color.FromRgb(0x1F, 0x1C, 0x1A), OffLegend = Color.FromRgb(0x84, 0x7F, 0x7B),
-            Card = Color.FromRgb(0x16, 0x13, 0x11);
+        public bool IsDarkTheme { get; private set; } = true;
+
+        public void SetTheme(bool dark) {
+            IsDarkTheme = dark;
+            InvalidateVisual();
+        }
 
         public void SetColors(Rgb[] c, bool animate) {
             if (c == null) c = new Rgb[0];
@@ -228,7 +232,7 @@ namespace Ohman {
         }
 
         Color ZoneColor(KeyDef k) {
-            if (shown.Length == 0) return OffCap;
+            if (shown.Length == 0) return IsDarkTheme ? Color.FromRgb(0x1F, 0x1C, 0x1A) : Color.FromRgb(0xDC, 0xD9, 0xE2);
             if (Smooth && shown.Length >= 4) return SmoothColor(k);
             return ToColor(shown[Math.Min(shown.Length - 1, Math.Max(0, k.Zone))]);
         }
@@ -256,6 +260,13 @@ namespace Ohman {
             double radius = 4;
             bool anyHover = Interactive && Hover.Count > 0, anySel = Interactive && Selected.Count > 0;
 
+            Color offCap = IsDarkTheme ? Color.FromRgb(0x1F, 0x1C, 0x1A) : Color.FromRgb(0xDC, 0xD9, 0xE2);
+            Color offLegend = IsDarkTheme ? Color.FromRgb(0x84, 0x7F, 0x7B) : Color.FromRgb(0x6E, 0x6A, 0x77);
+            Color card = IsDarkTheme ? Color.FromRgb(0x16, 0x13, 0x11) : Color.FromRgb(0xE8, 0xE6, 0xED);
+            Color selBorder = IsDarkTheme ? Color.FromRgb(0xFC, 0xFA, 0xF9) : Color.FromRgb(0x1C, 0x1A, 0x21);
+            Color hovBorder = IsDarkTheme ? WithA(Colors.White, 0.5) : WithA(Colors.Black, 0.45);
+            Color normBorder = IsDarkTheme ? WithA(Colors.Black, 0.22) : WithA(Colors.Black, 0.12);
+
             foreach (var k in Keys) {
                 var r = KeyRect(k);
                 bool sel = anySel && Selected.Contains(k.Index), hov = anyHover && Hover.Contains(k.Index);
@@ -264,23 +275,23 @@ namespace Ohman {
                     fill = Scale(ZoneColor(k), lv);
                     legend = Luma(fill) > 0.62 ? Color.FromArgb(0x80, 0, 0, 0) : Color.FromArgb(0xCC, 0xFF, 0xFF, 0xFF);
                 } else {
-                    fill = OffCap;
-                    legend = OffLegend;
+                    fill = offCap;
+                    legend = offLegend;
                 }
 
                 if (anyHover && !hov && !sel) {
-                    fill = Mix(Card, fill, 0.32);
+                    fill = Mix(card, fill, 0.32);
                     legend = WithA(legend, 0.45);
                 }
 
                 dc.DrawRoundedRectangle(B(fill), null, r, radius, radius);
 
                 if (sel)
-                    dc.DrawRoundedRectangle(null, new Pen(B(Color.FromRgb(0xFC, 0xFA, 0xF9)), 2), new Rect(r.X + 1, r.Y + 1, Math.Max(0, r.Width - 2), Math.Max(0, r.Height - 2)), radius, radius);
+                    dc.DrawRoundedRectangle(null, new Pen(B(selBorder), 2), new Rect(r.X + 1, r.Y + 1, Math.Max(0, r.Width - 2), Math.Max(0, r.Height - 2)), radius, radius);
                 else if (hov)
-                    dc.DrawRoundedRectangle(null, new Pen(B(WithA(Colors.White, 0.5)), 2), new Rect(r.X + 1, r.Y + 1, Math.Max(0, r.Width - 2), Math.Max(0, r.Height - 2)), radius, radius);
+                    dc.DrawRoundedRectangle(null, new Pen(B(hovBorder), 2), new Rect(r.X + 1, r.Y + 1, Math.Max(0, r.Width - 2), Math.Max(0, r.Height - 2)), radius, radius);
                 else
-                    dc.DrawRoundedRectangle(null, new Pen(B(WithA(Colors.Black, 0.22)), 1), new Rect(r.X + 0.5, r.Y + 0.5, Math.Max(0, r.Width - 1), Math.Max(0, r.Height - 1)), radius, radius);
+                    dc.DrawRoundedRectangle(null, new Pen(B(normBorder), 1), new Rect(r.X + 0.5, r.Y + 0.5, Math.Max(0, r.Width - 1), Math.Max(0, r.Height - 1)), radius, radius);
 
                 string label = k.Label.Trim();
                 if (label.Length > 0 && r.Width >= 14) {

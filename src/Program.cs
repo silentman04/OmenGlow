@@ -11,8 +11,8 @@ using WF = System.Windows.Forms;
 namespace Ohman {
 
     public static class Program {
-        public const string AppName = "OmenRgb";
-        public const string DisplayName = "OMEN 4-Zone RGB";
+        public const string AppName = "OmenGlow";
+        public const string DisplayName = "OmenGlow - 4-Zone RGB";
         public static readonly string Version = Meta.Version;
 
         static Mutex singleMutex;
@@ -77,6 +77,7 @@ namespace Ohman {
                 Log.Write("Self-test check succeeded. Exiting test run.");
                 Console.WriteLine("Self-test check succeeded.");
                 Cleanup();
+                Environment.Exit(0);
                 return 0;
             }
 

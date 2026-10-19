@@ -7,8 +7,8 @@
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <AssemblyName>OmenRgb</AssemblyName>
-    <RootNamespace>Ohman</RootNamespace>
+    <AssemblyName>OmenGlow</AssemblyName>
+    <RootNamespace>OmenGlow</RootNamespace>
     <LangVersion>latest</LangVersion>
     <StartupObject>Ohman.Program</StartupObject>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -16,11 +16,6 @@
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="tools\**" />
-    <None Include="tools\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Management" Version="8.0.0" />
