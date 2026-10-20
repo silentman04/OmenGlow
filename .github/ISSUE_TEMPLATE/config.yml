@@ -1,7 +1,7 @@
 blank_issues_enabled: false
 contact_links:
   - name: Community Discussions & Questions
-    url: https://github.com/manuv/OmenGlow/discussions
+    url: https://github.com/silentman04/OmenGlow/discussions
     about: Ask questions, share RGB color profiles, and discuss lighting setups.
   - name: Upstream Ohman Project
     url: https://github.com/P4R1H/ohman

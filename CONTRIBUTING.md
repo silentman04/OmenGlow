@@ -20,7 +20,7 @@ While this project is primarily maintained for the author's own setup, bug fixes
 
 ### A. Bug Reports
 If you encounter a bug on Windows 10/11:
-1. Check the [Existing Issues](https://github.com/manuv/OmenGlow/issues) to see if it has already been reported.
+1. Check the [Existing Issues](https://github.com/silentman04/OmenGlow/issues) to see if it has already been reported.
 2. If not, open a new issue using the [Bug Report Template](.github/ISSUE_TEMPLATE/bug_report.md).
 3. Include your Windows build and the output of running `OmenGlow.exe --test`.
 

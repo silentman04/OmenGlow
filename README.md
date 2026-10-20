@@ -139,7 +139,7 @@ OmenGlow strictly enforces an architectural boundary:
 ## Installation & Quick Start
 
 ### Option 1: Download Release Binary
-1. Download the latest `OmenGlow.exe` from the [Releases](https://github.com/manuv/OmenGlow/releases) page.
+1. Download the latest `OmenGlow.exe` from the [Releases](https://github.com/silentman04/OmenGlow/releases) page.
 2. Right-click `OmenGlow.exe` and select **Run as administrator**.
    *(Admin access is required by Windows to grant WMI BIOS write access to the motherboard firmware).*
 
@@ -152,7 +152,7 @@ OmenGlow strictly enforces an architectural boundary:
 #### 1-Click Build
 Clone the repository and run the included batch build script:
 ```cmd
-git clone https://github.com/manuv/OmenGlow.git
+git clone https://github.com/silentman04/OmenGlow.git
 cd OmenGlow
 .\build.cmd
 ```

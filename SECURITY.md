@@ -57,7 +57,7 @@ When running in standard hardware mode, OmenGlow requires **Run as administrator
 
 If you discover a security vulnerability or potential hardware issue in OmenGlow:
 1. **Do not disclose it publicly** in a public issue or forum.
-2. Please report the issue via GitHub's [Private Vulnerability Reporting](https://github.com/manuv/OmenGlow/security/advisories/new) or directly contact the maintainers.
+2. Please report the issue via GitHub's [Private Vulnerability Reporting](https://github.com/silentman04/OmenGlow/security/advisories/new) or directly contact the maintainers.
 3. Please provide:
    - A description of the issue.
    - Steps to reproduce or proof-of-concept.
