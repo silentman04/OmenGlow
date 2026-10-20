@@ -176,6 +176,13 @@ namespace Ohman {
         }
 
         static Icon CreateAppIcon() {
+            try {
+                string icoPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "app.ico");
+                if (System.IO.File.Exists(icoPath)) {
+                    return new Icon(icoPath, 32, 32);
+                }
+            } catch { }
+
             using (var bmp = new Bitmap(32, 32)) {
                 using (var g = Graphics.FromImage(bmp)) {
                     g.SmoothingMode = SmoothingMode.AntiAlias;

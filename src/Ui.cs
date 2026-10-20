@@ -53,6 +53,13 @@ namespace Ohman {
             E = engine;
             InitializeComponent();
 
+            try {
+                string icoPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "app.ico");
+                if (System.IO.File.Exists(icoPath)) {
+                    Icon = System.Windows.Media.Imaging.BitmapFrame.Create(new Uri(icoPath, UriKind.Absolute));
+                }
+            } catch { }
+
             // Set up Keyboard visualizer
             kbdView = new KeyboardView();
             var layout = KeyboardLayouts.Build(true, 4);
