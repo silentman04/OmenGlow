@@ -23,6 +23,8 @@ namespace Ohman {
 
         [STAThread]
         public static int Main(string[] args) {
+            EnsurePowerSavingGpuPreference();
+
             bool demo = false;
             bool hidden = false;
             bool test = false;
@@ -86,6 +88,8 @@ namespace Ohman {
 
             if (!hidden) {
                 mainWindow.Show();
+            } else {
+                MainWindow.TrimWorkingSet();
             }
 
             app.Run();
@@ -156,6 +160,23 @@ namespace Ohman {
                 var itemHide = new WF.ToolStripMenuItem("Minimize to Tray");
                 itemHide.Click += delegate { mainWindow.HideToTray(); };
                 menu.Items.Add(itemHide);
+
+                menu.Items.Add(new WF.ToolStripSeparator());
+
+                var itemStats = new WF.ToolStripMenuItem();
+                itemStats.Enabled = false;
+                itemStats.Font = new Font(itemStats.Font.FontFamily, 8.5f, System.Drawing.FontStyle.Regular);
+                menu.Items.Add(itemStats);
+
+                menu.Opening += delegate {
+                    try {
+                        var proc = System.Diagnostics.Process.GetCurrentProcess();
+                        double ramMb = Math.Round(proc.WorkingSet64 / (1024.0 * 1024.0), 1);
+                        bool onBattery = (System.Windows.Forms.SystemInformation.PowerStatus.PowerLineStatus == System.Windows.Forms.PowerLineStatus.Offline);
+                        string modeStr = engine.S.LightEffect == 0 ? "Static (0% CPU)" : (onBattery ? "Battery (200ms)" : "AC (120ms)");
+                        itemStats.Text = $"⚡ {ramMb} MB RAM • iGPU • {modeStr}";
+                    } catch { }
+                };
 
                 var itemExit = new WF.ToolStripMenuItem("Exit");
                 itemExit.Click += delegate { ExitApp(); };
@@ -240,6 +261,20 @@ namespace Ohman {
             } catch { }
             try {
                 if (singleMutex != null) singleMutex.ReleaseMutex();
+            } catch { }
+        }
+
+        static void EnsurePowerSavingGpuPreference() {
+            try {
+                string exePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+                using (var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\DirectX\UserGpuPreferences")) {
+                    if (key != null) {
+                        string val = key.GetValue(exePath) as string;
+                        if (string.IsNullOrEmpty(val) || !val.Contains("GpuPreference=1")) {
+                            key.SetValue(exePath, "GpuPreference=1;");
+                        }
+                    }
+                }
             } catch { }
         }
     }

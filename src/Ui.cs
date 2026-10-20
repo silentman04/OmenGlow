@@ -363,9 +363,22 @@ namespace Ohman {
             }
         }
 
+        [System.Runtime.InteropServices.DllImport("kernel32.dll", SetLastError = true)]
+        static extern bool SetProcessWorkingSetSize(IntPtr hProcess, IntPtr dwMinimumWorkingSetSize, IntPtr dwMaximumWorkingSetSize);
+
+        public static void TrimWorkingSet() {
+            try {
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, true);
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
+                SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, (IntPtr)(-1), (IntPtr)(-1));
+            } catch { }
+        }
+
         public void HideToTray() {
             Hide();
             Program.NotifyHiddenToTray();
+            TrimWorkingSet();
         }
 
         public void ShowFromTray() {

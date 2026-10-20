@@ -85,6 +85,9 @@ namespace Ohman {
         System.Threading.Timer fxTimer;
         double fxPhase;
         int fxFailures;
+        Rgb[] fxFrameBuffer;
+        Rgb[] fxScaledBuffer;
+        int currentInterval = 120;
 
         public static readonly Rgb[] DefaultZoneColors = new Rgb[] {
             new Rgb(0x00, 0x99, 0xFF), // Zone 0: Right (Azure Blue)
@@ -295,12 +298,22 @@ namespace Ohman {
             }
         }
 
+        public static int GetOptimalInterval() {
+            try {
+                if (System.Windows.Forms.SystemInformation.PowerStatus.PowerLineStatus == System.Windows.Forms.PowerLineStatus.Offline) {
+                    return 200; // 200ms on battery power (saves EC/WMI wakeups)
+                }
+            } catch { }
+            return 120; // 120ms on AC power (buttery smooth)
+        }
+
         void StartEffect() {
             fxFailures = 0;
+            currentInterval = GetOptimalInterval();
             if (fxTimer == null)
-                fxTimer = new System.Threading.Timer(delegate { EffectTick(); }, null, 120, 120);
+                fxTimer = new System.Threading.Timer(delegate { EffectTick(); }, null, currentInterval, currentInterval);
             else
-                fxTimer.Change(120, 120);
+                fxTimer.Change(currentInterval, currentInterval);
         }
 
         void StopEffect() {
@@ -312,17 +325,33 @@ namespace Ohman {
             if (Light == null || S.Light != 1 || S.LightEffect == 0) return;
             if (!Monitor.TryEnter(applySync, 50)) return;
             try {
-                fxPhase += 0.12 * SpeedFactor(S.LightSpeed);
-                var frame = new Rgb[LightColors.Length];
-                for (int i = 0; i < frame.Length; i++)
-                    frame[i] = EffectFrame(S.LightEffect, fxPhase, LightColors, i);
+                int targetInterval = GetOptimalInterval();
+                if (targetInterval != currentInterval) {
+                    currentInterval = targetInterval;
+                    fxTimer.Change(currentInterval, currentInterval);
+                }
+
+                double stepFactor = (currentInterval / 120.0);
+                fxPhase += 0.12 * SpeedFactor(S.LightSpeed) * stepFactor;
+
+                int len = LightColors.Length;
+                if (fxFrameBuffer == null || fxFrameBuffer.Length != len) {
+                    fxFrameBuffer = new Rgb[len];
+                    fxScaledBuffer = new Rgb[len];
+                }
+
+                for (int i = 0; i < len; i++)
+                    fxFrameBuffer[i] = EffectFrame(S.LightEffect, fxPhase, LightColors, i);
 
                 try {
-                    var scaled = Scaled(frame);
-                    Light.SetColors(scaled);
+                    double f = Math.Max(0.05, S.LightLevel / 100.0);
+                    for (int i = 0; i < len; i++)
+                        fxScaledBuffer[i] = fxFrameBuffer[i].Scale(f);
+
+                    Light.SetColors(fxScaledBuffer);
                     fxFailures = 0;
                     var fh = FrameChanged;
-                    if (fh != null) fh(scaled);
+                    if (fh != null) fh(fxScaledBuffer);
                 } catch (Exception ex) {
                     if (++fxFailures >= 5) {
                         Log.Write("effect halted due to consecutive errors: " + ex.Message);
