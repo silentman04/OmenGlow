@@ -1,47 +1,34 @@
 # Contributing to OmenGlow
 
-Thank you for your interest in contributing to **OmenGlow**!
+**OmenGlow** is an independent, personal open-source project tailored specifically for the **HP OMEN 16 (`am0279tx`)** laptop.
 
-Whether you are testing hardware compatibility across different HP OMEN laptop models, submitting bug fixes, designing new lighting animations, or improving documentation, your help is warmly welcomed.
-
----
-
-## 1. Core Architectural Boundary (Please Read First)
-
-OmenGlow has one foundational design principle that sets it apart from other laptop utilities:
-
-> **OmenGlow is dedicated exclusively to 4-Zone RGB Lighting. It will NEVER modify fan curves, thermal trip points, power limits, or CPU/GPU voltages.**
-
-- Pull requests that introduce fan RPM overrides, thermal throttling tampering, undervolting, or third-party kernel drivers (`.sys` files) **will be rejected**.
-- We intentionally leave all thermal and power management to HP's factory BIOS and the official **HP OMEN Gaming Hub**. This guarantees complete safety for users' laptops.
-
-If you are developing a new feature or optimization, please ensure it strictly stays within the lighting, UI, visualizer, efficiency, or telemetry domains.
+While this project is primarily maintained for the author's own setup, bug fixes, visual enhancements, and animation improvements are welcome.
 
 ---
 
-## 2. Ways to Contribute
+## ⚠️ Important Scope & Liability Notice
 
-### A. Hardware Compatibility Reports (Most Valuable!)
-We want to verify every HP OMEN model that works with OmenGlow. If you own an HP OMEN laptop:
-1. Run `OmenGlow.exe` as Administrator.
-2. Test static colors, brightness, and animations.
-3. Open an issue using our [Hardware Compatibility Report Template](.github/ISSUE_TEMPLATE/hardware_compatibility.md) and tell us:
-   - Your laptop model number (e.g., `HP Omen 16-am0279tx`, `HP Omen 17-ck0xxx`)
-   - CPU and GPU specifications
-   - BIOS version (run `wmic bios get smbiosbiosversion` or `Get-CimInstance Win32_BIOS | Select-Object SMBIOSBIOSVersion`)
-   - Did all 4 zones respond correctly?
+1. **Hardware Scope**: This software is tailored and tested strictly for the author's laptop model (**HP OMEN 16-am0279tx**). We do not actively test or maintain support for other laptop models.
+2. **Zero Liability**: Running this software on any machine is done strictly at your own risk. The author accepts zero responsibility for any hardware issues, motherboard behavior, or LED anomalies.
+3. **Thermal Safety is Non-Negotiable**:
+   > **OmenGlow is dedicated exclusively to 4-Zone RGB Lighting. It will NEVER modify fan curves, thermal trip points, power limits, or CPU/GPU voltages.**
+   Pull requests that introduce fan RPM overrides, thermal throttling tampering, undervolting, or third-party kernel drivers (`.sys` files) **will be rejected**.
 
-### B. Bug Reports
-If something isn't working:
+---
+
+## Ways to Contribute
+
+### A. Bug Reports
+If you encounter a bug on Windows 10/11:
 1. Check the [Existing Issues](https://github.com/manuv/OmenGlow/issues) to see if it has already been reported.
 2. If not, open a new issue using the [Bug Report Template](.github/ISSUE_TEMPLATE/bug_report.md).
-3. Include your Windows version, laptop model, and the output of running `OmenGlow.exe --test`.
+3. Include your Windows build and the output of running `OmenGlow.exe --test`.
 
-### C. Feature Requests
-Have an idea for a cool animation effect, UI enhancement, or palette preset?
+### B. Feature & Animation Proposals
+Have an idea for a creative lighting animation, palette preset, or vector visualizer tweak?
 - Open an issue using the [Feature Request Template](.github/ISSUE_TEMPLATE/feature_request.md).
 
-### D. Code & Optimization PRs
+### C. Code & Optimization PRs
 We welcome improvements to:
 - Lighting animation algorithms in `src/Engine.cs`.
 - Vector keyboard visualizer styling in `src/Keyboard.cs`.

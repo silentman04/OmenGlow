@@ -1,4 +1,14 @@
-# Security & Hardware Safety Policy
+# Security, Hardware Safety & Liability Policy
+
+## ⚠️ Personal Project & Hardware Liability Disclaimer
+
+> [!CAUTION]
+> **PLEASE READ CAREFULLY:**
+> 1. **Personal Project**: **OmenGlow** was developed and tested by the author solely for their personal laptop: the **HP OMEN 16 (`am0279tx`)**.
+> 2. **No Warranty & No Liability**: This software is provided under the GNU General Public License v3.0 *"as is"*, **WITHOUT ANY WARRANTY OF ANY KIND**. The author expressly disclaims all liability for any hardware damage, component bricking, motherboard failure, LED burn-in, loss of data, or voided warranties.
+> 3. **Run At Your Own Risk**: If you decide to build or execute this software on your machine or any other laptop model, you do so entirely at your own discretion, responsibility, and risk.
+
+---
 
 ## 1. Hardware Safety by Architecture
 

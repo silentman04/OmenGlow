@@ -3,7 +3,7 @@
 <img src="app.png" alt="OmenGlow Logo" width="140" height="140" style="border-radius: 24px;" />
 
 # OmenGlow
-### Ultra-Lightweight 4-Zone RGB Lighting Utility for HP OMEN Laptops
+### Ultra-Lightweight 4-Zone RGB Lighting Utility for HP OMEN 16 (`am0279tx`)
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Platform: Windows 10 | 11](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078D6.svg?logo=windows&logoColor=white)](https://microsoft.com/windows)
@@ -12,11 +12,22 @@
 [![Thermal Safety](https://img.shields.io/badge/Thermal%20Safety-100%25%20Isolated-success.svg)](#scope-isolation--thermal-safety)
 [![dGPU Sleep Safe](https://img.shields.io/badge/dGPU-0--Watt%20Sleep%20Locked-green.svg)](#efficiency--resource-footprint)
 
-*A clean, zero-bloat, standalone keyboard lighting manager designed specifically for HP OMEN laptops. Controls your 4-zone RGB keyboard with zero fan interference, 0.9 MB RAM footprint, live battery wattage telemetry, and full compatibility alongside official HP software.*
+*A clean, zero-bloat, standalone keyboard lighting manager created specifically for personal use on the HP OMEN 16 (`am0279tx`). Controls 4-zone RGB backlighting with zero fan interference, 0.9 MB RAM footprint, live battery wattage telemetry, and safe coexistence alongside official HP software.*
 
-[Key Features](#key-features) • [Why OmenGlow?](#why-omenglow) • [Efficiency](#efficiency--resource-footprint) • [Installation](#installation--quick-start) • [Compatibility](#compatibility) • [Attribution](#upstream-attribution--lineage) • [Disclaimer](#trademark-notice--disclaimer)
+[Key Features](#key-features) • [Personal Use & Disclaimer](#-personal-project--hardware-liability-disclaimer) • [Efficiency](#efficiency--resource-footprint) • [Installation](#installation--quick-start) • [Attribution](#upstream-attribution--lineage) • [Brand & Logo Rights](#brand--logo-assets-notice)
 
 </div>
+
+---
+
+## ⚠️ Personal Project & Hardware Liability Disclaimer
+
+> [!CAUTION]
+> **READ BEFORE USING:**
+> 1. **Personal Project**: This software was designed and engineered by the author **strictly for personal use** on their specific laptop model: **HP OMEN 16-am0279tx**.
+> 2. **No Warranty**: This software is provided *"as is"*, in the hope that it may be useful or interesting for reference, but **WITHOUT ANY WARRANTY OF ANY KIND**, express or implied, including but not limited to fitness for a particular purpose or non-infringement.
+> 3. **Zero Liability**: The author assumes **zero liability and zero responsibility** for any hardware damage, motherboard issues, LED behavior, firmware glitches, loss of data, system instability, or voided manufacturer warranties that may occur from downloading, compiling, or executing this code on your machine.
+> 4. **Hardware Specificity**: Different laptop revisions and motherboard batches can vary. **If you run this application on your laptop, you do so entirely at your own risk.**
 
 ---
 
@@ -114,16 +125,14 @@ OmenGlow strictly enforces an architectural boundary:
 
 ---
 
-## Compatibility
+## Compatibility & Hardware Scope
 
-### Verified Models
-- **HP OMEN 16 (2023 - 2024)** (Tested on `am0279tx`)
-- Models featuring **4-Zone RGB Keyboards** managed by HP BIOS WMI interface (`hpqBIntM`).
+> [!IMPORTANT]
+> **OmenGlow is tailored specifically for the HP OMEN 16 (`am0279tx`).**
 
-### Compatibility Criteria
+- **Verified & Supported Model**: **HP OMEN 16-am0279tx** (Intel Core i7, NVIDIA GeForce RTX, 4-Zone RGB keyboard).
 - **Operating System**: Windows 10 (64-bit) or Windows 11 (64-bit).
-- **Keyboard Hardware**: 4-Zone RGB keyboard. (Per-key RGB models or single-zone white backlight models use different BIOS packet structures).
-- If your HP OMEN laptop supports 4-Zone RGB lighting, OmenGlow should work out-of-the-box. Please [submit a Compatibility Report](https://github.com/manuv/OmenGlow/issues/new?template=hardware_compatibility.md) with your model details to help expand our verified hardware list!
+- **Other Models**: This software was developed solely for the author's specific laptop and is **not** supported as a universal tool for other HP models. While other 4-zone OMEN laptops may share similar WMI BIOS calls, running this software on unverified models is done entirely at your own risk.
 
 ---
 
@@ -191,26 +200,34 @@ In the spirit of modern open-source transparency:
 
 ## Contributing
 
-Contributions, bug reports, and hardware compatibility confirmations are welcome!
-- Please read our [Contributing Guidelines](CONTRIBUTING.md) before submitting code.
-- To report whether OmenGlow works on your HP OMEN model, please use our [Hardware Compatibility Template](.github/ISSUE_TEMPLATE/hardware_compatibility.md).
-- To report a bug, use the [Bug Report Template](.github/ISSUE_TEMPLATE/bug_report.md).
+This is a personal open-source project maintained for the author's setup.
+- If you find a bug specific to the application, animations, or UI, feel free to open an issue using the [Bug Report Template](.github/ISSUE_TEMPLATE/bug_report.md).
+- Please note that pull requests introducing fan control, power/voltage overrides, or thermal changes will not be accepted, as scope isolation is the project's primary design pillar.
 
 ---
 
 ## Security & Hardware Safety
 
-Please see [SECURITY.md](SECURITY.md) for details on why OmenGlow is architecturally safe for your laptop hardware and our vulnerability disclosure process.
+Please see [SECURITY.md](SECURITY.md) for full details on hardware safety, the Windows WMI BIOS security model, and our personal use liability disclaimers.
 
 ---
 
 ## License
 
-This project is licensed under the **GNU General Public License v3.0 or later** ([GNU GPLv3](LICENSE)).
+This project's source code is licensed under the **GNU General Public License v3.0 or later** ([GNU GPLv3](LICENSE)).
 
 In accordance with the GPL-3.0 license:
 - You are free to run, study, modify, and redistribute this software.
-- Any derivative works or distributions containing code from this project must also remain licensed under GNU GPL v3.0 or later and provide source code access.
+- Any derivative works or distributions containing code from this project must also remain licensed under GNU GPL v3.0 or later and provide complete source code access.
+
+---
+
+## Brand & Logo Assets Notice
+
+The **OmenGlow** mascot owl logo, emblem, and application icons (`app.ico`, `app.png`) represent the personal identity and creator branding of the repository author (used across personal media and YouTube).
+
+- **Code vs. Brand Asset Separation**: While all underlying source code in this repository is licensed under the [GNU General Public License v3.0](LICENSE), the visual branding, owl character, logo artwork, and avatar files are **reserved exclusively by the author**.
+- **Usage Restrictions**: You may not use the author's logo, avatar, or brand assets for commercial merchandise, external channel branding, or unrelated third-party applications without explicit written permission.
 
 ---
 
