@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Community Discussions & Questions
+    url: https://github.com/manuv/OmenGlow/discussions
+    about: Ask questions, share RGB color profiles, and discuss lighting setups.
+  - name: Upstream Ohman Project
+    url: https://github.com/P4R1H/ohman
+    about: Upstream project by P4R1H featuring hardware reverse-engineering of HP Omen WMI/EC protocols.
