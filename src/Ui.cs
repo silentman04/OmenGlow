@@ -363,15 +363,20 @@ namespace Ohman {
             }
         }
 
+        [System.Runtime.InteropServices.DllImport("psapi.dll")]
+        static extern int EmptyWorkingSet(IntPtr hwProc);
+
         [System.Runtime.InteropServices.DllImport("kernel32.dll", SetLastError = true)]
-        static extern bool SetProcessWorkingSetSize(IntPtr hProcess, IntPtr dwMinimumWorkingSetSize, IntPtr dwMaximumWorkingSetSize);
+        static extern bool SetProcessWorkingSetSize(IntPtr hProcess, UIntPtr dwMinimumWorkingSetSize, UIntPtr dwMaximumWorkingSetSize);
 
         public static void TrimWorkingSet() {
             try {
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, true);
                 GC.WaitForPendingFinalizers();
                 GC.Collect();
-                SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, (IntPtr)(-1), (IntPtr)(-1));
+                IntPtr h = System.Diagnostics.Process.GetCurrentProcess().Handle;
+                EmptyWorkingSet(h);
+                SetProcessWorkingSetSize(h, (UIntPtr)ulong.MaxValue, (UIntPtr)ulong.MaxValue);
             } catch { }
         }
 

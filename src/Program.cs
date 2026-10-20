@@ -170,11 +170,14 @@ namespace Ohman {
 
                 menu.Opening += delegate {
                     try {
+                        if (mainWindow != null && !mainWindow.IsVisible) {
+                            MainWindow.TrimWorkingSet();
+                        }
                         var proc = System.Diagnostics.Process.GetCurrentProcess();
+                        proc.Refresh();
                         double ramMb = Math.Round(proc.WorkingSet64 / (1024.0 * 1024.0), 1);
-                        bool onBattery = (System.Windows.Forms.SystemInformation.PowerStatus.PowerLineStatus == System.Windows.Forms.PowerLineStatus.Offline);
-                        string modeStr = engine.S.LightEffect == 0 ? "Static (0% CPU)" : (onBattery ? "Battery (200ms)" : "AC (120ms)");
-                        itemStats.Text = $"⚡ {ramMb} MB RAM • iGPU • {modeStr}";
+                        string pwr = GetPowerStats();
+                        itemStats.Text = $"⚡ {ramMb} MB RAM • iGPU • {pwr}";
                     } catch { }
                 };
 
@@ -276,6 +279,34 @@ namespace Ohman {
                     }
                 }
             } catch { }
+        }
+
+        static string GetPowerStats() {
+            try {
+                using (var searcher = new System.Management.ManagementObjectSearcher(@"root\WMI", "SELECT * FROM BatteryStatus")) {
+                    foreach (System.Management.ManagementObject obj in searcher.Get()) {
+                        bool online = (bool)obj["PowerOnline"];
+                        bool discharging = (bool)obj["Discharging"];
+                        bool charging = (bool)obj["Charging"];
+                        int dRate = Convert.ToInt32(obj["DischargeRate"]);
+                        int cRate = Convert.ToInt32(obj["ChargeRate"]);
+                        int rem = Convert.ToInt32(obj["RemainingCapacity"]);
+
+                        double remWh = rem / 1000.0;
+                        double rateW = (discharging ? dRate : cRate) / 1000.0;
+
+                        if (online) {
+                            if (charging && rateW > 0.1) {
+                                return $"AC (+{rateW:F1}W) • {remWh:F1}Wh";
+                            }
+                            return $"AC • {remWh:F1}Wh";
+                        } else {
+                            return $"{rateW:F1}W • {remWh:F1}Wh left";
+                        }
+                    }
+                }
+            } catch { }
+            return "iGPU";
         }
     }
 }
