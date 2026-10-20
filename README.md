@@ -108,3 +108,11 @@ OmenGlow/
 
 - **License**: Released under the [GNU General Public License v3.0 or later](LICENSE).
 - **Attribution**: Based on the open-source hardware reverse-engineering work from *Ohman* by P4R1H and the Ohman authors (https://github.com/P4R1H/ohman). Refactored into a focused, standalone lighting utility with all thermal/fan modules removed.
+
+---
+
+## Trademark Notice & Disclaimer
+
+**OMEN®** is a registered trademark of **HP Inc. (Hewlett-Packard)**.
+
+**OmenGlow** is an independent, unofficial community open-source project. It is **not** developed, sponsored, endorsed, or affiliated with HP Inc. or OMEN in any way. All trademarks, service marks, and trade names referenced herein belong to their respective owners and are used strictly for hardware compatibility and identification purposes under nominative fair use.
