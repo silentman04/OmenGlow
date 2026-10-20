@@ -74,12 +74,12 @@ The proven HP BIOS WMI lighting communication pathway is preserved with exact by
 | **Theme & Brushes** | `src/Theme.cs` | High-contrast OMEN dark palette, accent colors, easing curves, and XAML value converters. |
 | **Dedicated UI** | `src/Ui.xaml` & `src/Ui.cs` | Compact, single-window WPF interface with 5-zone selector, 5 effect modes, quick preset palette, brightness (0–100%) and animation speed (1–5) sliders. |
 | **Tray Coordinator** | `src/Program.cs` | Application entry point with single-instance named Mutex (`OmenGlow_Mutex`), command-line parser (`--demo`, `--hidden`, `--test`), and Windows System Tray integration with context menu. |
-| **Product Metadata** | `src/Meta.cs` | Clean assembly metadata (Product: `OmenGlow`, Version `2.0.0`). |
+| **Product Metadata** | `src/Meta.cs` | Clean assembly metadata (Product: `OmenGlow`, Version `1.0.0`). |
 | **Housekeeping** | `.gitignore`, `LICENSE`, `README.md` | Clean Git ignore rules, GPL-3.0 attribution license, and comprehensive user guide. |
 
 ---
 
-## 5. Quality of Life Additions (v2.1.0)
+## 5. User Interface & Theme Engine
 
 - **Factory Reset (`Reset to Defaults`)**:
   - Added dedicated `↺ Reset to Defaults` button directly in the header bar.
@@ -93,7 +93,7 @@ The proven HP BIOS WMI lighting communication pathway is preserved with exact by
 
 ---
 
-## 6. Optimization & Telemetry Additions (v2.2.0)
+## 6. Performance, Power Telemetry & System Optimization
 
 - **Native Working Set Memory Trimming (`0.9 MB RAM`)**:
   - Implemented unmanaged `psapi.dll!EmptyWorkingSet` invocation in `src/Ui.cs` (`TrimWorkingSet()`) combined with full garbage collection sweeps (`GC.Collect(2)`).

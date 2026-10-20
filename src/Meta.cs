@@ -15,6 +15,6 @@ namespace Ohman {
     public static class Meta {
         public const string Name = "OmenGlow";
         public const string DisplayName = "OmenGlow - 4-Zone RGB Lighting";
-        public const string Version = "2.0.0";
+        public const string Version = "1.0.0";
     }
 }
